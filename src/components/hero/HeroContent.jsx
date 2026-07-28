@@ -36,14 +36,15 @@ export default function HeroContent() {
       >
         Smart{" "}
         <span className="bg-gradient-to-r from-amber-300 via-orange-400 to-red-500 bg-clip-text text-transparent">
-          Snacking.
+          Vending.
         </span>{" "}
         Anytime. Anywhere.
       </motion.h1>
 
       <motion.p variants={item} className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
-        VA-GO INNOVATIVE is revolutionizing smart vending across India. Custom snack &amp; cigarette vending machines with age verification, nation-wide spare parts support, and high-impact ad displays.
+        VA-GO INNOVATIVE is revolutionizing automated retail across India. Custom dual-compartment vending machines with age verification, nation-wide spare parts support, and high-impact ad displays.
       </motion.p>
+
 
       <motion.div variants={item} className="flex flex-col items-center gap-3 sm:flex-row justify-center">
         <CTAButton variant="primary" icon="arrow">

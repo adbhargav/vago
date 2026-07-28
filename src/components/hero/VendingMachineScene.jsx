@@ -232,25 +232,8 @@ export default function VendingMachineScene({
         className="right-[10%] bottom-[-4%] w-[16%] sm:w-[18%]"
       />
 
-      {/* Neon SNACKS sign */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute left-1/2 bottom-[-8%] w-[44%] sm:w-[48%] -translate-x-1/2 z-20 pointer-events-none"
-      >
-        <motion.img
-          src={heroAssets.snacksNeon}
-          alt="Neon SNACKS sign"
-          draggable={false}
-          animate={reduceMotion ? {} : { opacity: [0.85, 1, 0.85] }}
-          transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-          className="w-full drop-shadow-[0_0_35px_rgba(251,146,60,0.75)]"
-        />
-      </motion.div>
-
-
     </div>
   );
 }
+
 
