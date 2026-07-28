@@ -44,7 +44,8 @@ export default function FloatingSnack({
 
   return (
     <motion.div
-      className={`absolute select-none pointer-events-none ${className}`}
+      className={`absolute select-none pointer-events-none transform-gpu will-change-transform ${className}`}
+
       style={{
         x: totalX,
         y: totalY,

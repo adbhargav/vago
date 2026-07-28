@@ -19,7 +19,13 @@ export function useMouseParallax({ disabled = false, springConfig } = {}) {
   const y = useSpring(rawY, springConfig ?? { stiffness: 60, damping: 18, mass: 0.4 });
 
   useEffect(() => {
-    if (disabled) {
+    // Disable on touch / mobile devices for maximum scroll performance
+    const isTouchDevice =
+      disabled ||
+      (typeof window !== "undefined" &&
+        (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window));
+
+    if (isTouchDevice) {
       rawX.set(0);
       rawY.set(0);
       return;
@@ -27,6 +33,7 @@ export function useMouseParallax({ disabled = false, springConfig } = {}) {
 
     const node = ref.current;
     if (!node) return;
+
 
     let frame = null;
 
