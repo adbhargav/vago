@@ -216,10 +216,11 @@ function DesktopHero({ reduceMotion }) {
       // ── 3. ScrollTrigger timeline ──
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: containerRef.current,
-          start:   "top top",
-          end:     "bottom bottom",
-          scrub:   1.5,
+          trigger:       containerRef.current,
+          start:         "top top",
+          end:           "bottom bottom",
+          scrub:         1.5,         // smooth scrub lag (not instant snap)
+          anticipatePin: 1,           // Fix: prevents address-bar resize jank during pin
           onEnter() {
             // Kill float loops as soon as user starts scrolling
             floatTweens.current.forEach((tw) => tw.kill());
@@ -292,7 +293,7 @@ function DesktopHero({ reduceMotion }) {
     <div ref={containerRef} style={{ height: "300vh", position: "relative" }}>
 
       {/* ── STICKY VIEWPORT ── */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#061B55]">
+      <div className="hero-sticky sticky top-0 h-screen w-full overflow-hidden bg-[#061B55]">
 
         {/* Ambient lighting */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -316,7 +317,8 @@ function DesktopHero({ reduceMotion }) {
         </div>
 
         {/* ══ SPLIT LAYOUT ══ */}
-        <div className="relative flex h-full max-w-7xl mx-auto px-6 lg:px-8 items-center">
+        {/* hero-overlay: pointer-events:none on wrapper, restored on buttons/links inside */}
+        <div className="hero-overlay relative flex h-full max-w-7xl mx-auto px-6 lg:px-8 items-center">
 
           {/* LEFT: Hero copy
               - Outer div is GSAP target (fades out on focus phase)
@@ -374,6 +376,8 @@ function DesktopHero({ reduceMotion }) {
                     src={heroAssets.vendingMachine}
                     alt="VA-GO Dual-Compartment Smart Vending Machine"
                     draggable={false}
+                    loading="eager"
+                    decoding="async"
                     className="w-[68%] lg:w-[72%] h-auto filter contrast-[1.06] drop-shadow-[0_40px_80px_rgba(0,0,0,0.92)]"
                     style={{ maxWidth: "340px" }}
                   />

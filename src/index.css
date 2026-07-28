@@ -4,32 +4,54 @@
 
 /* ── Design Tokens ── */
 @theme {
-  /* Brand colors */
   --color-brand-navy:     #061B55;
   --color-brand-yellow:   #FFB300;
   --color-brand-white:    #FFFFFF;
   --color-brand-offwhite: #F8F9FA;
 
-  /* Fonts */
   --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-sans:    "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ── Base ── */
+/* ── Base: prevent horizontal overflow & mobile scroll jank ── */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;           /* Fix A: prevents horizontal layout shift */
 }
 
 body {
   font-family: var(--font-sans);
   background-color: #061B55;
   color: #F8F9FA;
+  overflow-x: hidden;           /* Fix A: belt-and-braces for sub-elements */
+  touch-action: pan-y;          /* Fix B: lets browser handle vertical scroll natively on mobile */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .font-display {
   font-family: var(--font-display);
+}
+
+/* ── Fix C: Hero overlay pointer-events pattern ──
+   The sticky hero container must not intercept scroll/click events
+   that belong to the canvas or background. Interactive children
+   (buttons, links) restore pointer-events explicitly.
+*/
+.hero-overlay {
+  pointer-events: none;
+}
+.hero-overlay button,
+.hero-overlay a,
+.hero-overlay [role="button"] {
+  pointer-events: auto;
+}
+
+/* ── Fix D: Ensure pinned sticky section never causes horizontal scroll ── */
+.hero-sticky {
+  overflow: hidden;
+  /* Prevent address-bar resize from triggering layout shift during pin */
+  will-change: transform;
 }
 
 /* ── Selection ── */
@@ -42,6 +64,21 @@ body {
 :focus-visible {
   outline: 2px solid #FFB300;
   outline-offset: 3px;
+}
+
+/* ── Preloader animation ── */
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes loader-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.96); }
+  50%       { opacity: 1;   transform: scale(1.04); }
+}
+.vago-loader-ring {
+  animation: loader-spin 1.1s linear infinite;
+}
+.vago-loader-logo {
+  animation: loader-pulse 1.6s ease-in-out infinite;
 }
 
 /* ── Reduced motion ── */
