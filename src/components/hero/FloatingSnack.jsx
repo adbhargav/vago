@@ -1,5 +1,4 @@
 import { motion, useTransform, useMotionValue } from "framer-motion";
-
 /**
  * FloatingSnack
  * A single floating layer in the vending machine 3D scene:
