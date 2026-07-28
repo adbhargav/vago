@@ -88,7 +88,7 @@ export default function VendingMachineScene({
 
 
 
-      {/* Floating snack layers in clean non-overlapping spatial orbits */}
+      {/* Floating snack layers in tight, cohesive 3D orbit around central machine */}
       {/* Top Left: Cheetos */}
       <FloatingSnack
         image={heroAssets.cheetos}
@@ -101,12 +101,12 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={-200}
-        scrollY={-150}
+        scrollX={-160}
+        scrollY={-120}
         scrollRotate={-30}
         scrollScale={1.2}
         reduceMotion={reduceMotion}
-        className="left-[-2%] top-[0%] w-[20%] sm:w-[22%]"
+        className="left-[4%] top-[4%] w-[22%] sm:w-[24%]"
       />
 
       {/* Top Right: Snickers */}
@@ -122,12 +122,12 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={180}
-        scrollY={-180}
+        scrollX={140}
+        scrollY={-140}
         scrollRotate={25}
         scrollScale={1.2}
         reduceMotion={reduceMotion}
-        className="right-[2%] top-[-4%] w-[24%] sm:w-[26%]"
+        className="right-[6%] top-[2%] w-[26%] sm:w-[28%]"
       />
 
       {/* Mid Right: Coca-Cola */}
@@ -143,12 +143,12 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={220}
-        scrollY={-40}
+        scrollX={180}
+        scrollY={-30}
         scrollRotate={35}
         scrollScale={1.25}
         reduceMotion={reduceMotion}
-        className="right-[-8%] top-[24%] w-[16%] sm:w-[18%]"
+        className="right-[-2%] top-[28%] w-[18%] sm:w-[20%]"
       />
 
       {/* Mid Left: Doritos */}
@@ -163,12 +163,12 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={-240}
+        scrollX={-180}
         scrollY={20}
         scrollRotate={-40}
         scrollScale={1.25}
         reduceMotion={reduceMotion}
-        className="left-[-8%] top-[24%] w-[20%] sm:w-[22%]"
+        className="left-[-2%] top-[28%] w-[22%] sm:w-[24%]"
       />
 
       {/* Lower Right: Oreo */}
@@ -184,12 +184,12 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={220}
-        scrollY={120}
+        scrollX={160}
+        scrollY={100}
         scrollRotate={30}
         scrollScale={1.2}
         reduceMotion={reduceMotion}
-        className="right-[-4%] bottom-[16%] w-[20%] sm:w-[22%]"
+        className="right-[4%] bottom-[14%] w-[22%] sm:w-[24%]"
       />
 
       {/* Lower Left: Lays */}
@@ -204,12 +204,12 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={-200}
-        scrollY={140}
+        scrollX={-160}
+        scrollY={110}
         scrollRotate={-25}
         scrollScale={1.2}
         reduceMotion={reduceMotion}
-        className="left-[-4%] bottom-[16%] w-[20%] sm:w-[22%]"
+        className="left-[4%] bottom-[14%] w-[22%] sm:w-[24%]"
       />
 
       {/* Bottom Right: Payment Phone */}
@@ -224,16 +224,18 @@ export default function VendingMachineScene({
         parallaxX={parallaxX}
         parallaxY={parallaxY}
         scrollYProgress={scrollYProgress}
-        scrollX={180}
-        scrollY={180}
+        scrollX={140}
+        scrollY={140}
         scrollRotate={25}
         scrollScale={1.2}
         reduceMotion={reduceMotion}
-        className="right-[10%] bottom-[-4%] w-[16%] sm:w-[18%]"
+        className="right-[8%] bottom-[-2%] w-[18%] sm:w-[20%]"
       />
-
     </div>
   );
 }
+
+
+
 
 

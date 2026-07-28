@@ -4,6 +4,7 @@
 // project runs out of the box — replace them with production photography/renders.
 
 import vendingMachine from "../../assets/hero/vending-machine.png";
+import vendingPurchase from "../../assets/hero/vending-purchase.png";
 import cheetos from "../../assets/hero/cheetos.png";
 import snickers from "../../assets/hero/snickers.png";
 import doritos from "../../assets/hero/doritos.png";
@@ -16,6 +17,7 @@ import paymentPhone from "../../assets/hero/payment-phone.png";
 
 export const heroAssets = {
   vendingMachine,
+  vendingPurchase,
   cheetos,
   snickers,
   doritos,
@@ -28,5 +30,6 @@ export const heroAssets = {
 };
 
 export default heroAssets;
+
 
 
