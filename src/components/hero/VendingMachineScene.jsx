@@ -37,79 +37,55 @@ export default function VendingMachineScene({
       />
 
 
-      {/* Central Highlighted Vending Machine */}
-      <ParallaxObject
-        parallaxX={parallaxX}
-        parallaxY={parallaxY}
-        translateStrength={10}
-        rotateStrength={6}
-        reduceMotion={reduceMotion}
-        className="absolute left-1/2 top-1/2 z-10 w-[68%] sm:w-[72%] -translate-x-1/2 -translate-y-1/2"
-      >
+      {/* Central Highlighted Realistic Vending Machine (Static & Anchor) */}
+      <div className="absolute left-1/2 top-1/2 z-10 w-[72%] sm:w-[76%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto">
         <motion.div
-          initial={{ opacity: 0, scale: 0.85, y: 30 }}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           onHoverStart={() => setHovered(true)}
           onHoverEnd={() => setHovered(false)}
           onFocus={() => setHovered(true)}
           onBlur={() => setHovered(false)}
           tabIndex={0}
-          role="button"
-          aria-label="Interactive illuminated smart vending machine."
+          role="region"
+          aria-label="Realistic VA-GO Dual-Compartment Smart Vending Machine."
           className="relative cursor-pointer outline-none group"
         >
-          <motion.div
-            animate={
-              reduceMotion
-                ? {}
-                : {
-                    y: [0, -10, 0],
-                    scale: hovered ? 1.04 : 1,
-                    rotateY: hovered ? 8 : 0,
-                    rotateX: hovered ? -4 : 0,
-                  }
-            }
-            transition={{
-              y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-              scale: { duration: 0.35, ease: "easeOut" },
-              rotateY: { duration: 0.35, ease: "easeOut" },
-              rotateX: { duration: 0.35, ease: "easeOut" },
-            }}
-            className="drop-shadow-[0_45px_85px_rgba(251,146,60,0.35)] filter transition-all"
-          >
+          <div className="drop-shadow-[0_45px_85px_rgba(0,0,0,0.85)] filter transition-all duration-300 group-hover:scale-[1.02]">
             <img
               src={heroAssets.vendingMachine}
-              alt="Illuminated smart vending machine"
+              alt="Photorealistic VA-GO Dual-Compartment Smart Vending Machine"
               draggable={false}
-              className="w-full h-auto transition-opacity duration-300 filter contrast-105 brightness-105"
+              className="w-full h-auto transition-opacity duration-300 filter contrast-[1.08] brightness-[1.02]"
             />
-          </motion.div>
+          </div>
 
           {/* Intense Glow Aura on Vending Machine */}
           <motion.div
             aria-hidden="true"
-            animate={{ opacity: hovered ? 1 : 0.4 }}
+            animate={{ opacity: hovered ? 0.9 : 0.4 }}
             transition={{ duration: 0.3 }}
-            className="pointer-events-none absolute inset-[-10%] rounded-[40px] bg-[radial-gradient(circle,_rgba(251,146,60,0.5)_0%,_transparent_70%)] blur-2xl"
+            className="pointer-events-none absolute inset-[-8%] rounded-[40px] bg-[radial-gradient(circle,_rgba(251,146,60,0.45)_0%,_transparent_70%)] blur-2xl"
           />
 
           <motion.span
             aria-hidden="true"
-            animate={{ opacity: hovered ? 1 : 0.7, y: hovered ? 0 : 4 }}
+            animate={{ opacity: hovered ? 1 : 0.85, y: hovered ? 0 : 4 }}
             transition={{ duration: 0.25 }}
-            className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-amber-500/40 bg-black/80 px-4 py-1 text-xs font-bold tracking-wide text-amber-300 shadow-[0_0_15px_rgba(251,146,60,0.5)] backdrop-blur-md"
+            className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-amber-500/40 bg-black/85 px-4 py-1.5 text-xs font-extrabold tracking-wide text-amber-300 shadow-[0_0_20px_rgba(251,146,60,0.5)] backdrop-blur-md"
           >
-            ⚡ VA-GO Smart Vending
+            ⚡ VA-GO Dual-Compartment Smart Machine
           </motion.span>
         </motion.div>
 
-        {/* Dynamic ground shadow */}
+        {/* Dynamic realistic ground shadow */}
         <div
           aria-hidden="true"
-          className="absolute -bottom-6 left-1/2 h-8 w-[80%] -translate-x-1/2 rounded-full bg-black/80 blur-2xl"
+          className="absolute -bottom-6 left-1/2 h-8 w-[85%] -translate-x-1/2 rounded-full bg-black/90 blur-2xl"
         />
-      </ParallaxObject>
+      </div>
+
 
 
       {/* Floating snack layers in clean non-overlapping spatial orbits */}
