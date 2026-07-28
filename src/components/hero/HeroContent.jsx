@@ -20,48 +20,45 @@ export default function HeroContent() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="relative z-10 flex max-w-xl flex-col gap-6 text-center lg:text-left"
+      className="relative z-10 flex max-w-3xl flex-col items-center gap-6 text-center mx-auto"
     >
       <motion.span
         variants={item}
-        className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white/60 lg:mx-0"
+        className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-amber-400 backdrop-blur-md"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-        Smart Vending &bull; Next Generation
+        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+        VA-GO INNOVATIVE &bull; SMART RETAIL AUTOMATION
       </motion.span>
 
       <motion.h1
         variants={item}
-        className="font-display text-[2.75rem] font-bold leading-[1.05] text-white sm:text-6xl lg:text-[4rem]"
+        className="font-display text-[2.75rem] font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl tracking-tight"
       >
         Smart{" "}
         <span className="bg-gradient-to-r from-amber-300 via-orange-400 to-red-500 bg-clip-text text-transparent">
           Snacking.
-        </span>
-        <br />
-        Anytime.
-        <br />
-        Anywhere.
+        </span>{" "}
+        Anytime. Anywhere.
       </motion.h1>
 
-      <motion.p variants={item} className="mx-auto max-w-md text-base leading-relaxed text-white/60 sm:text-lg lg:mx-0">
-        Discover a smarter way to snack. Our intelligent vending machines bring
-        your favorite snacks and drinks closer to you &mdash; fast, convenient,
-        and always ready.
+      <motion.p variants={item} className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
+        VA-GO INNOVATIVE is revolutionizing smart vending across India. Custom snack &amp; cigarette vending machines with age verification, nation-wide spare parts support, and high-impact ad displays.
       </motion.p>
 
-      <motion.div variants={item} className="flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+      <motion.div variants={item} className="flex flex-col items-center gap-3 sm:flex-row justify-center">
         <CTAButton variant="primary" icon="arrow">
-          Explore Vending
+          Explore Solutions
         </CTAButton>
         <CTAButton variant="secondary" icon="pin">
-          Find a Machine
+          Partner With Us
         </CTAButton>
       </motion.div>
 
-      <motion.div variants={item} className="mx-auto lg:mx-0">
+      <motion.div variants={item} className="mt-2">
         <HeroStats delay={0} />
       </motion.div>
     </motion.div>
   );
 }
+
+

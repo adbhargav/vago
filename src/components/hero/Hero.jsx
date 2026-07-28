@@ -109,24 +109,16 @@ export default function Hero() {
       </div>
 
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-8 px-6 py-20">
-        {/* Subtle top eyebrow header */}
+      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-10 px-6 pt-32 pb-16 text-center">
+        {/* Centered Top: Hero Content */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center z-20"
+          style={{ opacity: reduceMotion ? 1 : contentOpacity, y: reduceMotion ? 0 : contentY }}
+          className="w-full flex justify-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-400 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-            Next Gen Smart Vending
-          </span>
-          <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
-            Smart <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">Snacking</span> Experience
-          </h1>
+          <HeroContent />
         </motion.div>
 
-        {/* Central 3D Interactive Scene */}
+        {/* Centered Stage: Highlighted 3D Vending Machine Scene */}
         <motion.div
           style={{
             scale: reduceMotion ? 1 : sceneScale,
@@ -142,6 +134,8 @@ export default function Hero() {
           />
         </motion.div>
       </div>
+
+
 
     </section>
   );
