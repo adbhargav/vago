@@ -1,35 +1,50 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap");
+/* ── VAGO Innovative Brand Guide Fonts ── */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
 
+/* ── Design Tokens ── */
 @theme {
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Brand colors */
+  --color-brand-navy:     #061B55;
+  --color-brand-yellow:   #FFB300;
+  --color-brand-white:    #FFFFFF;
+  --color-brand-offwhite: #F8F9FA;
+
+  /* Fonts */
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* ── Base ── */
 html {
   scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #08080c;
-  color: #f4f1ea;
+  background-color: #061B55;
+  color: #F8F9FA;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .font-display {
   font-family: var(--font-display);
 }
 
+/* ── Selection ── */
 ::selection {
-  background-color: rgba(251, 146, 60, 0.35);
-  color: #fff;
+  background-color: rgba(255, 179, 0, 0.35);
+  color: #061B55;
 }
 
+/* ── Focus ── */
 :focus-visible {
-  outline: 2px solid #fb923c;
+  outline: 2px solid #FFB300;
   outline-offset: 3px;
 }
 
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

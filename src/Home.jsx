@@ -1,16 +1,13 @@
 import Navbar from "./components/Navbar";
-import Hero from "./components/hero/Hero";
+import ScrollHero from "./components/hero/ScrollHero";
 import NextSection from "./components/hero/NextSection";
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden bg-[#08080c]">
+    <main className="overflow-x-hidden bg-[#061B55]">
       <Navbar />
-      <Hero />
+      <ScrollHero />
       <NextSection />
     </main>
   );
 }
-
-
-

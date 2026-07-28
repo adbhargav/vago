@@ -4,14 +4,12 @@ import HeroStats from "./HeroStats";
 
 const container = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-  },
+  show: { transition: { staggerChildren: 0.13, delayChildren: 0.0 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 22 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } },
 };
 
 export default function HeroContent() {
@@ -20,46 +18,48 @@ export default function HeroContent() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="relative z-10 flex max-w-3xl flex-col items-center gap-6 text-center mx-auto"
+      className="relative z-10 flex max-w-xl flex-col items-center gap-6 text-center md:items-start md:text-left"
     >
+      {/* ── Eyebrow badge ── */}
       <motion.span
         variants={item}
-        className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-amber-400 backdrop-blur-md"
+        className="inline-flex items-center gap-2 rounded-full border border-[#FFB300]/30 bg-[#FFB300]/10 px-4 py-1.5 font-display text-[11px] font-bold uppercase tracking-[0.22em] text-[#FFB300]"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-        VA-GO INNOVATIVE &bull; SMART RETAIL AUTOMATION
+        <span className="h-1.5 w-1.5 rounded-full bg-[#FFB300] animate-pulse" />
+        Innovative Vending Solutions
       </motion.span>
 
+      {/* ── Headline ── */}
       <motion.h1
         variants={item}
-        className="font-display text-[2.75rem] font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl tracking-tight"
+        className="font-display text-[2.75rem] font-extrabold leading-[1.06] text-white sm:text-[3.5rem] lg:text-[4.5rem] tracking-tight"
       >
-        Smart{" "}
-        <span className="bg-gradient-to-r from-amber-300 via-orange-400 to-red-500 bg-clip-text text-transparent">
-          Vending.
-        </span>{" "}
-        Anytime. Anywhere.
+        Smart Vending,{" "}
+        <br className="hidden sm:block" />
+        <span className="text-[#FFB300]">Redefined.</span>
       </motion.h1>
 
-      <motion.p variants={item} className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
-        VA-GO INNOVATIVE is revolutionizing automated retail across India. Custom dual-compartment vending machines with age verification, nation-wide spare parts support, and high-impact ad displays.
+      {/* ── Sub-headline ── */}
+      <motion.p
+        variants={item}
+        className="max-w-lg font-sans text-base font-light leading-relaxed text-white/65 sm:text-lg"
+      >
+        Experience the future of automated snack dispensing. India's most advanced dual-compartment vending network — with age verification, AI-driven support, and real-time payment.
       </motion.p>
 
-
-      <motion.div variants={item} className="flex flex-col items-center gap-3 sm:flex-row justify-center">
-        <CTAButton variant="primary" icon="arrow">
-          Explore Solutions
-        </CTAButton>
-        <CTAButton variant="secondary" icon="pin">
-          Partner With Us
-        </CTAButton>
+      {/* ── CTAs ── */}
+      <motion.div
+        variants={item}
+        className="flex flex-col items-center gap-3 sm:flex-row md:justify-start"
+      >
+        <CTAButton variant="primary">Explore Machine</CTAButton>
+        <CTAButton variant="secondary">Partner With Us</CTAButton>
       </motion.div>
 
-      <motion.div variants={item} className="mt-2">
-        <HeroStats delay={0} />
+      {/* ── Feature pills ── */}
+      <motion.div variants={item} className="mt-1 w-full">
+        <HeroStats />
       </motion.div>
     </motion.div>
   );
 }
-
-

@@ -1,142 +1,182 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import HeroContent from "./HeroContent";
 import VendingMachineScene from "./VendingMachineScene";
-import useMouseParallax from "../../hooks/useMouseParallax";
 import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
+
+// ─── Thin noise particles that drift upward ───
+function AmbientParticle({ index }) {
+  const size = (index % 3) * 2 + 2;
+  const left = `${(index * 19 + 7) % 98}%`;
+  const delay = (index * 0.41) % 7;
+  const duration = 9 + (index % 5) * 2.2;
+  const isGold = index % 3 !== 1;
+  return (
+    <motion.span
+      className={`absolute rounded-full pointer-events-none ${
+        isGold
+          ? "bg-amber-400/70 shadow-[0_0_8px_rgba(251,146,60,0.7)]"
+          : "bg-purple-400/60 shadow-[0_0_8px_rgba(147,51,234,0.7)]"
+      }`}
+      style={{ width: size, height: size, left, top: "105%", willChange: "transform, opacity" }}
+      animate={{
+        y: [0, "-115vh"],
+        opacity: [0, 0.9, 0],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    />
+  );
+}
 
 export default function Hero() {
   const sectionRef = useRef(null);
   const reduceMotion = usePrefersReducedMotion();
+  const [isTouch, setIsTouch] = useState(false);
 
-  const { ref: parallaxRef, x: parallaxX, y: parallaxY } = useMouseParallax({
-    disabled: reduceMotion,
-  });
+  // Raw mouse position (normalized –0.5 → 0.5)
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
+  // Spring-smoothed — very soft, high mass = premium feel
+  const parallaxX = useSpring(rawX, { stiffness: 40, damping: 20, mass: 0.8 });
+  const parallaxY = useSpring(rawY, { stiffness: 40, damping: 20, mass: 0.8 });
 
-  const sceneScale = useTransform(scrollYProgress, [0, 1], [1, 0.86]);
-  const sceneY = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  useEffect(() => {
+    const touch = window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+    setIsTouch(touch);
+    if (touch || reduceMotion) return;
 
-  const setRefs = (node) => {
-    sectionRef.current = node;
-    parallaxRef.current = node;
-  };
+    const section = sectionRef.current;
+    if (!section) return;
+
+    let raf;
+    const onMove = (e) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        rawX.set((e.clientX - rect.left) / rect.width - 0.5);
+        rawY.set((e.clientY - rect.top) / rect.height - 0.5);
+      });
+    };
+    const onLeave = () => { rawX.set(0); rawY.set(0); };
+
+    section.addEventListener("pointermove", onMove, { passive: true });
+    section.addEventListener("pointerleave", onLeave, { passive: true });
+    return () => {
+      section.removeEventListener("pointermove", onMove);
+      section.removeEventListener("pointerleave", onLeave);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduceMotion, rawX, rawY]);
 
   return (
     <section
-      ref={setRefs}
-      className="relative min-h-screen w-full overflow-hidden bg-[#08080c]"
-      style={{ perspective: 1200 }}
+      ref={sectionRef}
+      className="relative min-h-screen w-full overflow-hidden bg-[#061B55]"
     >
-      {/* Ultra-premium dynamic background lighting */}
+
+      {/* ── Deep background lighting ── */}
       <motion.div
         aria-hidden="true"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.4, ease: "easeOut" }}
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="pointer-events-none absolute inset-0"
       >
-        {/* Pulsing radial glow spots */}
+        {/* Central amber warmth */}
         <motion.div
-          animate={reduceMotion ? {} : { scale: [1, 1.2, 1], opacity: [0.35, 0.55, 0.35] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] sm:h-[800px] sm:w-[800px] rounded-full bg-[radial-gradient(circle,_rgba(245,158,11,0.22)_0%,_rgba(147,51,234,0.18)_40%,_transparent_70%)] blur-3xl"
+          animate={reduceMotion ? {} : { scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute left-1/2 top-1/3 h-[640px] w-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(255,179,0,0.28) 0%, rgba(255,179,0,0.12) 42%, transparent 70%)",
+            willChange: "transform, opacity",
+          }}
         />
-
+        {/* Left cool accent */}
         <motion.div
-          animate={reduceMotion ? {} : { scale: [1.1, 0.9, 1.1], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute left-1/4 bottom-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,_rgba(59,130,246,0.2)_0%,_transparent_70%)] blur-3xl"
+          animate={reduceMotion ? {} : { scale: [1.08, 0.9, 1.08], opacity: [0.18, 0.32, 0.18] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+          className="absolute -left-20 bottom-0 h-[480px] w-[480px] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(6,27,85,0.9) 0%, rgba(59,130,246,0.18) 60%, transparent 100%)",
+            willChange: "transform, opacity",
+          }}
         />
-
+        {/* Right pink-purple accent */}
         <motion.div
-          animate={reduceMotion ? {} : { scale: [0.9, 1.25, 0.9], opacity: [0.25, 0.5, 0.25] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute right-1/4 top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,_rgba(236,72,153,0.18)_0%,_transparent_70%)] blur-3xl"
+          animate={reduceMotion ? {} : { scale: [0.9, 1.2, 0.9], opacity: [0.22, 0.42, 0.22] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2.5 }}
+          className="absolute right-0 top-16 h-[520px] w-[520px] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(168,85,247,0.18) 0%, transparent 70%)",
+            willChange: "transform, opacity",
+          }}
         />
       </motion.div>
 
-      {/* Dynamic Animated Floating Bokeh Particles */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        {Array.from({ length: 22 }).map((_, index) => {
-          const size = (index % 4) * 6 + 4;
-          const duration = (index % 5) * 3 + 7;
-          const delay = (index % 7) * 0.8;
-          const startX = (index * 17) % 100;
-          const startY = (index * 23) % 100;
-          const isGolden = index % 2 === 0;
+      {/* ── Ambient rising particles ── */}
+      {!reduceMotion && (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <AmbientParticle key={i} index={i} />
+          ))}
+        </div>
+      )}
 
-          return (
-            <motion.span
-              key={index}
-              initial={{ opacity: 0.2, y: 0 }}
-              animate={
-                reduceMotion
-                  ? {}
-                  : {
-                      opacity: [0.2, 0.85, 0.2],
-                      y: [-25, 35, -25],
-                      x: [-15, 15, -15],
-                      scale: [1, 1.4, 1],
-                    }
-              }
-              transition={{
-                duration,
-                delay,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className={`absolute rounded-full filter blur-[1px] ${
-                isGolden
-                  ? "bg-gradient-to-r from-amber-400 to-orange-500 shadow-[0_0_12px_rgba(251,146,60,0.8)]"
-                  : "bg-gradient-to-r from-purple-400 to-blue-400 shadow-[0_0_12px_rgba(147,51,234,0.8)]"
-              }`}
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                left: `${startX}%`,
-                top: `${startY}%`,
-              }}
-            />
-          );
-        })}
-      </div>
+      {/* ══════════════════════════════════════════
+          MAIN LAYOUT
+          Mobile: stack vertically, content top
+          Desktop (md+): side by side — content left, scene right
+      ══════════════════════════════════════════ */}
+      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-8 px-6 pt-24 pb-12 md:flex-row md:gap-0 md:pt-0">
 
-
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-10 px-6 pt-32 pb-16 text-center">
-        {/* Centered Top: Hero Content */}
+        {/* LEFT — Hero copy */}
         <motion.div
-          style={{ opacity: reduceMotion ? 1 : contentOpacity, y: reduceMotion ? 0 : contentY }}
-          className="w-full flex justify-center"
+          initial={{ opacity: 0, x: -32 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left md:pr-8"
         >
           <HeroContent />
         </motion.div>
 
-        {/* Centered Stage: Highlighted 3D Vending Machine Scene */}
+        {/* RIGHT — Vending Machine Scene */}
         <motion.div
-          style={{
-            scale: reduceMotion ? 1 : sceneScale,
-            y: reduceMotion ? 0 : sceneY,
-          }}
-          className="relative z-10 w-full flex justify-center"
+          initial={{ opacity: 0, x: 32, scale: 0.95 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full flex justify-center md:w-1/2"
         >
           <VendingMachineScene
-            parallaxX={parallaxX}
-            parallaxY={parallaxY}
-            scrollYProgress={scrollYProgress}
+            parallaxX={isTouch || reduceMotion ? undefined : parallaxX}
+            parallaxY={isTouch || reduceMotion ? undefined : parallaxY}
             reduceMotion={reduceMotion}
           />
         </motion.div>
       </div>
 
-
-
+      {/* ── Scroll indicator ── */}
+      <motion.div
+        aria-label="Scroll down"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.6, duration: 0.7, ease: "easeOut" }}
+      >
+        <span className="font-sans text-[10px] font-medium uppercase tracking-widest text-white/30">Scroll</span>
+        <motion.span
+          animate={reduceMotion ? {} : { y: [0, 8, 0], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="block h-8 w-[1px] rounded-full bg-gradient-to-b from-[#FFB300] to-transparent"
+          style={{ willChange: "transform, opacity" }}
+        />
+      </motion.div>
     </section>
   );
 }

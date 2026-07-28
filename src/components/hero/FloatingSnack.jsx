@@ -1,11 +1,13 @@
-import { motion, useTransform, useMotionValue } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
+import { useMotionValue } from "framer-motion";
+
 /**
- * FloatingSnack
- * A single floating layer in the vending machine 3D scene:
- * - Entrance reveal animation
- * - Ambient floating/rotation loop
- * - Mouse parallax offsets
- * - Scroll explosion/dispersion transformation matching coffee design
+ * FloatingSnack — Premium version
+ * - Staggered slide-in entrance (scale + fade + Y rise)
+ * - Organic sinusoidal float loop (Y + subtle rotation)
+ * - Smooth mouse parallax depth shift (GPU only)
+ * - Zero scroll explosion — feels like real product sites
+ * - All transforms on compositor thread only
  */
 export default function FloatingSnack({
   image,
@@ -13,78 +15,71 @@ export default function FloatingSnack({
   className = "",
   depth = 1,
   delay = 0,
-  duration = 5,
+  floatY = 12,
+  floatDuration = 4.5,
+  rotateAmount = 0,
   parallaxStrength = 10,
-  floatDistance = 10,
-  rotation = 0,
   parallaxX,
   parallaxY,
-  scrollYProgress,
-  scrollX = 0,
-  scrollY = 0,
-  scrollRotate = 0,
-  scrollScale = 1,
   reduceMotion = false,
-  children,
+  initialRotate = 0,
 }) {
-  const fallbackMotion = useMotionValue(0);
-  const activeScrollProgress = scrollYProgress || fallbackMotion;
+  const fallback = useMotionValue(0);
 
-  const px = useTransform(parallaxX || fallbackMotion, (v) => (reduceMotion ? 0 : v * parallaxStrength));
-  const py = useTransform(parallaxY || fallbackMotion, (v) => (reduceMotion ? 0 : v * parallaxStrength));
-
-  const sX = useTransform(activeScrollProgress, [0, 1], [0, reduceMotion ? 0 : scrollX]);
-  const sY = useTransform(activeScrollProgress, [0, 1], [0, reduceMotion ? 0 : scrollY]);
-  const sRotate = useTransform(activeScrollProgress, [0, 1], [0, reduceMotion ? 0 : scrollRotate]);
-  const sScale = useTransform(activeScrollProgress, [0, 1], [1, reduceMotion ? 1 : scrollScale]);
-
-  const totalX = useTransform([px, sX], ([mx, sx]) => mx + sx);
-  const totalY = useTransform([py, sY], ([my, sy]) => my + sy);
+  const px = useTransform(
+    parallaxX || fallback,
+    (v) => (reduceMotion ? 0 : v * parallaxStrength)
+  );
+  const py = useTransform(
+    parallaxY || fallback,
+    (v) => (reduceMotion ? 0 : v * parallaxStrength * 0.6)
+  );
 
   return (
     <motion.div
-      className={`absolute select-none pointer-events-none transform-gpu will-change-transform ${className}`}
-
+      className={`absolute select-none pointer-events-none ${className}`}
       style={{
-        x: totalX,
-        y: totalY,
-        rotate: sRotate,
-        scale: sScale,
+        x: px,
+        y: py,
         zIndex: Math.round(depth * 10),
+        willChange: "transform",
       }}
-      initial={{ opacity: 0, scale: 0.8, y: 24 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, scale: 0.72, y: 32, rotate: initialRotate - 8 }}
+      animate={{ opacity: 1, scale: 1, y: 0, rotate: initialRotate }}
+      transition={{
+        delay,
+        duration: 0.85,
+        ease: [0.16, 1, 0.3, 1],
+      }}
     >
+      {/* Organic float loop — runs independently of scroll/mouse */}
       <motion.div
         animate={
           reduceMotion
             ? {}
             : {
-                y: [0, -floatDistance, 0],
-                rotate: rotation ? [0, rotation, 0] : 0,
+                y: [0, -floatY, 0],
+                rotate: rotateAmount
+                  ? [initialRotate, initialRotate + rotateAmount, initialRotate]
+                  : initialRotate,
               }
         }
         transition={{
-          duration,
-          delay: delay + 0.4,
+          duration: floatDuration,
+          delay: delay + 0.5,
           repeat: Infinity,
           ease: "easeInOut",
+          times: [0, 0.5, 1],
         }}
-        className="drop-shadow-[0_22px_45px_rgba(0,0,0,0.65)]"
+        style={{ willChange: "transform" }}
       >
-        {image ? (
-          <img
-            src={image}
-            alt={alt}
-            draggable={false}
-            className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
-          />
-        ) : (
-          children
-        )}
+        <img
+          src={image}
+          alt={alt}
+          draggable={false}
+          className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
+        />
       </motion.div>
     </motion.div>
   );
 }
-
